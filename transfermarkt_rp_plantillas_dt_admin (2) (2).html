@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transfermarkt RP | Fútbol Roleplay</title>
+<style>
+:root{--green:#8bc34a;--green2:#a6d96a;--bg:#f2f4f5;--ink:#18252d;--muted:#687780;--line:#dce2e5;--card:#fff;--nav:#172832;--red:#c94b4b;--blue:#3879a8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Arial,sans-serif}
+header{background:var(--nav);color:white;border-bottom:4px solid var(--green);padding:13px max(4%,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:23px;letter-spacing:.2px}.brand span{color:var(--green)}
+nav{display:flex;gap:5px;flex-wrap:wrap}nav button{background:transparent;color:#dce5e9;border:0;padding:10px 12px;border-radius:6px;cursor:pointer;font-weight:700}nav button.active,nav button:hover{background:#2c414d;color:white}
+button{cursor:pointer;border:0;border-radius:6px;padding:9px 12px;font-weight:700;background:var(--green);color:#17230f}button.secondary{background:#e7edef;color:#263942}button.danger{background:#f8e5e5;color:#9c3434}button.dark{background:#2b414c;color:white}
+main{max-width:1180px;margin:22px auto;padding:0 16px}.view{display:none}.view.active{display:block}
+.hero{background:linear-gradient(110deg,#203945,#345564);color:white;padding:26px;border-radius:10px;margin-bottom:17px}.hero h1{font-size:clamp(24px,4vw,36px);margin:0 0 5px}.hero p{color:#d1dfe4;margin:0;max-width:720px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin:14px 0}.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px}.stat small,.muted{color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:3px}.stat em{font-style:normal;color:#4d7925;font-size:12px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 12px}.head h2{margin:0;font-size:22px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.toolbar input,.toolbar select{width:auto;min-width:160px}
+input,select{width:100%;padding:10px;border:1px solid #cbd5da;border-radius:6px;background:white;color:var(--ink)}label{font-size:12px;color:var(--muted);display:block;margin:0 0 4px}.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin:12px 0}
+.tablewrap{overflow-x:auto;background:white;border:1px solid var(--line);border-radius:9px}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #e8edef}th{font-size:11px;text-transform:uppercase;color:#63747d;background:#f7f9fa}tr:last-child td{border-bottom:0}
+.player{display:flex;align-items:center;gap:9px;min-width:170px}.avatar{width:52px;height:68px;flex:0 0 52px;border-radius:5px;overflow:hidden;display:grid;place-items:center;background:#e5efdb;color:#47721f;font-weight:900;position:relative}.avatar img{width:100%;height:100%;object-fit:cover;display:block}.avatar .initial{position:absolute;inset:0;display:grid;place-items:center}.tag{display:inline-block;padding:3px 7px;border-radius:4px;background:#edf2f4;font-size:11px;font-weight:700}.value{font-weight:800;color:#477b20}.empty{text-align:center;color:var(--muted);padding:22px}
+.clubgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.clubcard{background:white;border:1px solid var(--line);border-radius:9px;padding:15px}.clubtop{display:flex;justify-content:space-between;gap:10px;align-items:center}.crest{width:42px;height:42px;border-radius:9px;background:#e7efdf;color:#47721f;display:grid;place-items:center;font-size:19px;font-weight:900}.clubcard h3{margin:0}.clubcard p{margin:8px 0;color:var(--muted)}
+.notice{background:#f0f6e9;border:1px solid #d6e6c4;color:#435c2b;padding:12px;border-radius:7px;margin:12px 0}.warning{background:#fff6e6;border-color:#f0dfb9;color:#795d25}
+.modalback{position:fixed;inset:0;background:#101a20a8;display:none;align-items:center;justify-content:center;padding:15px;z-index:5}.modalback.show{display:flex}.modal{background:white;border-radius:10px;padding:20px;max-width:540px;width:100%;max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center}.modalhead h3{margin:0}.close{background:#edf1f2;color:#34434a}
+footer{text-align:center;color:#78858b;padding:28px 12px;font-size:12px}
+@media(max-width:650px){header{padding:12px 15px}.brand{font-size:19px}nav{width:100%}nav button{padding:8px}.hero{padding:19px}}
+</style></head>
+<body>
+<header><div class="brand">TRANSFER<span>MARKT</span> RP</div><nav id="nav">
+<button class="active" data-view="dashboard">Inicio</button><button data-view="players">Jugadores</button><button data-view="clubs">Clubes RP</button><button data-view="squads">Plantillas</button><button data-view="leagues">Ligas</button><button data-view="transfers">Fichajes</button><button data-view="market">Mercado</button><button data-view="stats">Estadísticas</button><button data-view="history">Historial</button><button data-view="admin" id="adminNav" style="display:none">Admin</button>
+</nav><button class="dark" id="accountBtn" onclick="openAccount()">Entrar / Cuenta</button></header>
+<main>
+<section class="view active" id="dashboard">
+<div class="hero"><h1>El mercado de tu liga RP</h1><p>La plataforma central de clubes, directores técnicos, jugadores y movimientos del servidor. Cada club administra su propia plantilla; la administración supervisa toda la competición.</p></div>
+<div class="grid">
+<div class="stat"><small>Jugadores registrados</small><strong id="nPlayers">0</strong><em>En la base de datos RP</em></div>
+<div class="stat"><small>Clubes participantes</small><strong id="nClubs">0</strong><em>Equipos de la liga</em></div>
+<div class="stat"><small>Fichajes registrados</small><strong id="nTransfers">0</strong><em>Compras, ventas y préstamos</em></div>
+<div class="stat"><small>Valor total de mercado</small><strong id="nValue">€0 M</strong><em>Valor estimado de plantillas</em></div>
+</div>
+<div class="head"><h2>Últimos movimientos</h2><button class="secondary" onclick="showView('history')">Ver historial</button></div>
+<div class="tablewrap"><table><thead><tr><th>Jugador</th><th>Movimiento</th><th>Clubes</th><th>Fecha</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+<div class="notice">Esta es una demostración funcional. Los datos se guardan en este navegador. Para usarla entre todos los miembros del Discord se necesita una base de datos compartida y autenticación real.</div>
+</section>
+
+<section class="view" id="players">
+<div class="head"><div><h2>Jugadores</h2><span class="muted">Perfiles y valores de mercado</span></div><div class="toolbar"><input id="playerSearch" placeholder="Buscar jugador..." oninput="renderPlayers()"><button onclick="openPlayer()">+ Añadir jugador</button></div></div>
+<div class="notice">Plantilla inicial de ejemplo para Brentford y Everton. Las estadísticas empiezan en cero para que el RP las actualice.</div><div class="tablewrap"><table><thead><tr><th>Futbolista</th><th>Nacionalidad</th><th>Edad</th><th>Posición</th><th>Club</th><th>Valor</th><th>Goles</th><th>Asist.</th><th></th></tr></thead><tbody id="playerRows"></tbody></table></div>
+</section>
+
+<section class="view" id="clubs">
+<div class="head"><div><h2>Clubes RP por liga</h2><span class="muted">Los equipos participantes aparecen agrupados en su competición</span></div><button onclick="openClub()">+ Registrar club</button></div>
+<div id="clubCards"></div>
+</section>
+
+<section class="view" id="squads">
+<div class="head"><div><h2>Plantillas de los clubes</h2><span class="muted" id="squadSubtitle">Consulta los jugadores de Brentford y Everton</span></div>
+<div class="toolbar"><select id="squadClub" onchange="renderSquads()"></select></div></div>
+<div class="notice" id="squadAccessNote">Los directores técnicos ven la plantilla de su club asignado. Los administradores pueden consultar ambas plantillas.</div>
+<div id="squadContent"></div>
+</section>
+
+<section class="view" id="leagues">
+<div class="head"><div><h2>Directorio de ligas</h2><span class="muted">Las cinco grandes de Europa y las primeras divisiones de América</span></div><div class="toolbar"><select id="leagueRegion" onchange="renderLeagues()"><option value="all">Todas las regiones</option><option value="Europa">Europa</option><option value="Norteamérica">Norteamérica</option><option value="Centroamérica y Caribe">Centroamérica y Caribe</option><option value="Sudamérica">Sudamérica</option></select></div></div>
+<div class="notice">Este directorio es una base para el RP: los clubes de aquí son externos y no se convierten automáticamente en clubes participantes.</div><div id="leagueDirectory" class="clubgrid"></div>
+</section>
+
+<section class="view" id="transfers">
+<div class="head"><div><h2>Gestión de fichajes</h2><span class="muted">Registra operaciones aprobadas por ambas partes</span></div><div class="toolbar"><button class="secondary" onclick="openExternalSigning()">+ Fichar desde fuera del RP</button><button onclick="openTransfer()">+ Nuevo movimiento</button></div></div>
+<div class="notice warning">En esta demo, los movimientos se registran directamente. En la versión conectada se podrá implementar aprobación del club vendedor y comprador.</div>
+<div class="tablewrap"><table><thead><tr><th>Jugador</th><th>Tipo</th><th>Club origen</th><th>Club destino</th><th>Importe</th><th>Estado</th></tr></thead><tbody id="transferRows"></tbody></table></div>
+</section>
+
+<section class="view" id="market">
+<div class="head"><div><h2>Mercado</h2><span class="muted">Valores de jugadores y salarios</span></div><div class="toolbar"><select id="marketPos" onchange="renderMarket()"><option value="">Todas las posiciones</option><option>POR</option><option>DFC</option><option>LI</option><option>LD</option><option>MCD</option><option>MC</option><option>MCO</option><option>EI</option><option>ED</option><option>DC</option></select><input id="marketSearch" placeholder="Buscar..." oninput="renderMarket()"></div></div>
+<div class="tablewrap"><table><thead><tr><th>Jugador</th><th>Club</th><th>Posición</th><th>Valor mercado</th><th>Salario semanal</th></tr></thead><tbody id="marketRows"></tbody></table></div>
+</section>
+
+<section class="view" id="stats">
+<div class="head"><div><h2>Estadísticas</h2><span class="muted">Rendimiento de futbolistas</span></div></div>
+<div class="grid"><div class="stat"><small>Goles registrados</small><strong id="totalGoals">0</strong></div><div class="stat"><small>Asistencias registradas</small><strong id="totalAssists">0</strong></div><div class="stat"><small>Partidos registrados</small><strong id="totalMatches">0</strong></div></div>
+<div class="tablewrap"><table><thead><tr><th>Jugador</th><th>Club</th><th>Partidos</th><th>Goles</th><th>Asistencias</th></tr></thead><tbody id="statsRows"></tbody></table></div>
+</section>
+
+<section class="view" id="history">
+<div class="head"><div><h2>Historial del mercado</h2><span class="muted">Registro cronológico de movimientos</span></div></div>
+<div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Jugador</th><th>Operación</th><th>Origen</th><th>Destino</th><th>Importe</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+</section>
+
+<section class="view" id="admin">
+<div class="head"><div><h2>Administración</h2><span class="muted">Control general de la plataforma</span></div></div>
+<div class="panel"><h3>Herramientas de administrador</h3><p class="muted">En el prototipo puedes consultar todos los registros. La verificación real de permisos requiere cuentas seguras en un servidor.</p><div class="toolbar"><button class="secondary" onclick="exportData()">Exportar datos JSON</button><button class="danger" onclick="resetDemo()">Restablecer demo</button></div></div>
+<div class="panel" style="margin-top:12px"><h3>Reglas de permisos previstas</h3><ul><li>Director técnico: edita únicamente el club que tiene asignado.</li><li>Administrador: puede gestionar clubes, cuentas, jugadores y movimientos.</li><li>Visitante: consulta perfiles, clubes, estadísticas y mercado.</li></ul></div>
+</section>
+</main>
+<footer>TRANSFERMARKT RP · Plataforma comunitaria de fútbol Roleplay · No afiliada a Transfermarkt</footer>
+
+<div class="modalback" id="modalback"><div class="modal"><div class="modalhead"><h3 id="modalTitle">Formulario</h3><button class="close" onclick="closeModal()">✕</button></div><div id="modalBody"></div></div></div>
+<script>
+const leagueData=[
+{region:"Europa",league:"Premier League",country:"Inglaterra",clubs:"Arsenal · Aston Villa · Bournemouth · Brentford · Brighton · Chelsea · Crystal Palace · Everton · Fulham · Ipswich Town · Leicester City · Liverpool · Manchester City · Manchester United · Newcastle · Nottingham Forest · Southampton · Tottenham · West Ham · Wolves"},
+{region:"Europa",league:"LaLiga",country:"España",clubs:"Real Madrid · Barcelona · Atlético de Madrid · Athletic Club · Real Sociedad · Sevilla · Valencia · Villarreal · Betis · Girona"},
+{region:"Europa",league:"Serie A",country:"Italia",clubs:"Inter · Milan · Juventus · Napoli · Roma · Lazio · Atalanta · Fiorentina · Bologna · Torino"},
+{region:"Europa",league:"Bundesliga",country:"Alemania",clubs:"Bayern Múnich · Borussia Dortmund · Bayer Leverkusen · RB Leipzig · Stuttgart · Eintracht Frankfurt · Wolfsburgo · Hoffenheim"},
+{region:"Europa",league:"Ligue 1",country:"Francia",clubs:"PSG · Marseille · Monaco · Lyon · Lille · Rennes · Nice · Lens · Strasbourg"},
+{region:"Norteamérica",league:"Major League Soccer (MLS)",country:"Estados Unidos y Canadá",clubs:"Inter Miami · LAFC · LA Galaxy · New York City FC · New York Red Bulls · Seattle Sounders · Atlanta United · Columbus Crew · Toronto FC · Vancouver Whitecaps"},
+{region:"Norteamérica",league:"Canadian Premier League",country:"Canadá",clubs:"Forge FC · Cavalry FC · Pacific FC · Atlético Ottawa · Vancouver FC"},
+{region:"Norteamérica",league:"Liga MX",country:"México",clubs:"América · Chivas · Cruz Azul · Pumas · Tigres · Monterrey · Toluca · Pachuca · León · Santos Laguna"},
+{region:"Centroamérica y Caribe",league:"Liga Panameña de Fútbol",country:"Panamá",clubs:"Tauro · Plaza Amador · San Francisco · Árabe Unido"},
+{region:"Centroamérica y Caribe",league:"Liga Nacional",country:"Guatemala",clubs:"Comunicaciones · Municipal · Antigua GFC · Xelajú"},
+{region:"Centroamérica y Caribe",league:"Primera División",country:"El Salvador",clubs:"Alianza · FAS · Águila · Firpo"},
+{region:"Centroamérica y Caribe",league:"Liga Primera",country:"Nicaragua",clubs:"Diriangén · Real Estelí · Managua FC"},
+{region:"Centroamérica y Caribe",league:"Liga Promérica",country:"Costa Rica",clubs:"Saprissa · Alajuelense · Herediano · Cartaginés"},
+{region:"Centroamérica y Caribe",league:"Liga Nacional",country:"Honduras",clubs:"Olimpia · Motagua · Real España · Marathón"},
+{region:"Centroamérica y Caribe",league:"Liga de Primera",country:"Belice",clubs:"Verdes FC · Belmopan Bandits · Police United"},
+{region:"Centroamérica y Caribe",league:"Ligue Haïtienne",country:"Haití",clubs:"Violette AC · Don Bosco · Racing CH · Baltimore SC"},
+{region:"Centroamérica y Caribe",league:"Caribbean / Leagues nacionales",country:"Caribe",clubs:"Cibao FC (Rep. Dominicana) · Defence Force (Trinidad y Tobago) · Mount Pleasant (Jamaica) · SV Robinhood (Surinam) · Club Franciscain (Martinica)"},
+{region:"Sudamérica",league:"Liga BetPlay",country:"Colombia",clubs:"Atlético Nacional · Millonarios · América de Cali · Deportivo Cali · Junior · Santa Fe · Once Caldas · Deportes Tolima"},
+{region:"Sudamérica",league:"Primera División",country:"Argentina",clubs:"River Plate · Boca Juniors · Racing · Independiente · San Lorenzo · Estudiantes · Vélez · Talleres"},
+{region:"Sudamérica",league:"Brasileirão Série A",country:"Brasil",clubs:"Flamengo · Palmeiras · Corinthians · São Paulo · Santos · Fluminense · Botafogo · Grêmio · Internacional · Atlético Mineiro"},
+{region:"Sudamérica",league:"Liga de Primera",country:"Chile",clubs:"Colo-Colo · Universidad de Chile · Universidad Católica · Unión Española"},
+{region:"Sudamérica",league:"LigaPro Serie A",country:"Ecuador",clubs:"Barcelona SC · LDU Quito · Emelec · Independiente del Valle"},
+{region:"Sudamérica",league:"Primera División",country:"Uruguay",clubs:"Peñarol · Nacional · Defensor Sporting · Liverpool FC"},
+{region:"Sudamérica",league:"Primera División",country:"Paraguay",clubs:"Olimpia · Cerro Porteño · Libertad · Guaraní"},
+{region:"Sudamérica",league:"Liga 1",country:"Perú",clubs:"Alianza Lima · Universitario · Sporting Cristal · Melgar"},
+{region:"Sudamérica",league:"División Profesional",country:"Bolivia",clubs:"Bolívar · The Strongest · Always Ready · Oriente Petrolero"},
+{region:"Sudamérica",league:"Primera División",country:"Venezuela",clubs:"Caracas FC · Deportivo Táchira · Academia Puerto Cabello · Monagas"}
+];
+const seed={"clubs":[{"id":"c1","name":"Brentford","coach":"Por asignar","budget":200,"abbr":"BRE","league":"Premier League"},{"id":"c2","name":"Everton","coach":"Por asignar","budget":150,"abbr":"EVE","league":"Premier League"}],"players":[{"id":"c1_rp_01","name":"Jordan Pickford","age":0,"pos":"POR","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_02","name":"Hákon Valdimarsson","age":0,"pos":"POR","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_03","name":"Ellery Balcombe","age":0,"pos":"POR","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_04","name":"Aaron Hickey","age":0,"pos":"LD/LI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_05","name":"Rico Henry","age":0,"pos":"LI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_06","name":"John Stones","age":0,"pos":"DFC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_07","name":"Robin Le Normand","age":0,"pos":"LI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_08","name":"Nathan Collins","age":0,"pos":"DFC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_09","name":"El Hadji Malick Diouf","age":0,"pos":"LI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_10","name":"Jannik Schuster","age":0,"pos":"DFC/MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_11","name":"Benjamin Fredrick","age":0,"pos":"DFC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_12","name":"Denzel Dumfries","age":0,"pos":"LD","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_13","name":"Jonathan Tah","age":0,"pos":"DFC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_14","name":"Yehor Yarmoliuk","age":0,"pos":"MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_15","name":"Mathias Jensen","age":0,"pos":"MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_16","name":"Fabián Ruiz","age":0,"pos":"MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_17","name":"Mikkel Damsgaard","age":0,"pos":"MCO/MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_18","name":"Vitaly Janelt","age":0,"pos":"MCD/MC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_19","name":"Dango Ouattara","age":0,"pos":"ED","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_20","name":"Callum Wilson","age":0,"pos":"DC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_21","name":"Jaidon Anthony","age":0,"pos":"EI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_22","name":"Gustavo Nunes","age":0,"pos":"EI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_23","name":"Kaye Furo","age":0,"pos":"DC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_24","name":"Moise Kean","age":0,"pos":"DC","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_25","name":"Victor Muñoz","age":0,"pos":"EI","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c1_rp_26","name":"Max Downman","age":0,"pos":"ED","club":"c1","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_01","name":"Guillaume Restes","age":0,"pos":"POR","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_02","name":"Jarrad Branthwaite","age":0,"pos":"DFC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_03","name":"James Tarkowski","age":0,"pos":"DFC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_04","name":"Jake O'Brien","age":0,"pos":"DFC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_05","name":"Vitalii Mykolenko","age":0,"pos":"LI","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_06","name":"Joaquín Seys","age":0,"pos":"LD","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_07","name":"Kiernan Dewsbury-Hall","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_08","name":"Charly Alcaraz","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_09","name":"Hayden Hackney","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_10","name":"Merlin Röhl","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_11","name":"James Garner","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_12","name":"Tom Fellows","age":0,"pos":"ED","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_13","name":"Thierno Barry","age":0,"pos":"DC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_14","name":"Tyrique George","age":0,"pos":"EI","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_15","name":"Tyler Dibling","age":0,"pos":"ED","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_16","name":"Brennan Johnson","age":0,"pos":"ED","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_17","name":"Javi Morcillo","age":0,"pos":"MC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0},{"id":"c2_rp_18","name":"Pep Gonzáles","age":0,"pos":"DC","club":"c2","value":0,"salary":0,"matches":0,"goals":0,"assists":0,"nationality":"República Dominicana"}],"transfers":[]};
+let db;try{db=JSON.parse(localStorage.getItem("tmrp-pro-v2"))||JSON.parse(JSON.stringify(seed))}catch(e){db=JSON.parse(JSON.stringify(seed))}
+
+// Actualización de plantillas RP 2026/27: reemplaza las plantillas antiguas una sola vez.
+if(!db.rostersVersion || db.rostersVersion < 2){
+  db.players = db.players.filter(p => p.club !== "c1" && p.club !== "c2")
+    .concat(JSON.parse(JSON.stringify(seed.players)));
+  db.rostersVersion = 2;
+  try{localStorage.setItem("tmrp-pro-v2",JSON.stringify(db));}catch(e){}
+}
+
+const nationalityByName = {
+  "Jordan Pickford": "🏴 Inglaterra",
+  "Hákon Valdimarsson": "🇮🇸 Islandia",
+  "Ellery Balcombe": "🏴 Inglaterra",
+  "Aaron Hickey": "🏴 Escocia",
+  "Rico Henry": "🏴 Inglaterra",
+  "John Stones": "🏴 Inglaterra",
+  "Robin Le Normand": "🇪🇸 España",
+  "Nathan Collins": "🇮🇪 Irlanda",
+  "El Hadji Malick Diouf": "🇸🇳 Senegal",
+  "Jannik Schuster": "🇦🇹 Austria",
+  "Benjamin Fredrick": "🇳🇬 Nigeria",
+  "Denzel Dumfries": "🇳🇱 Países Bajos",
+  "Jonathan Tah": "🇩🇪 Alemania",
+  "Yehor Yarmoliuk": "🇺🇦 Ucrania",
+  "Mathias Jensen": "🇩🇰 Dinamarca",
+  "Fabián Ruiz": "🇪🇸 España",
+  "Mikkel Damsgaard": "🇩🇰 Dinamarca",
+  "Vitaly Janelt": "🇩🇪 Alemania",
+  "Dango Ouattara": "🇧🇫 Burkina Faso",
+  "Callum Wilson": "🏴 Inglaterra",
+  "Jaidon Anthony": "🏴 Inglaterra",
+  "Gustavo Nunes": "🇧🇷 Brasil",
+  "Kaye Furo": "🇧🇪 Bélgica",
+  "Moise Kean": "🇮🇹 Italia",
+  "Victor Muñoz": "🇪🇸 España",
+  "Max Downman": "🏴 Inglaterra",
+  "Guillaume Restes": "🇫🇷 Francia",
+  "Jarrad Branthwaite": "🏴 Inglaterra",
+  "James Tarkowski": "🏴 Inglaterra",
+  "Jake O'Brien": "🇮🇪 Irlanda",
+  "Vitalii Mykolenko": "🇺🇦 Ucrania",
+  "Joaquín Seys": "🇧🇪 Bélgica",
+  "Kiernan Dewsbury-Hall": "🏴 Inglaterra",
+  "Charly Alcaraz": "🇦🇷 Argentina",
+  "Hayden Hackney": "🏴 Inglaterra",
+  "Merlin Röhl": "🇩🇪 Alemania",
+  "James Garner": "🏴 Inglaterra",
+  "Tom Fellows": "🏴 Inglaterra",
+  "Thierno Barry": "🇫🇷 Francia",
+  "Tyrique George": "🏴 Inglaterra",
+  "Tyler Dibling": "🏴 Inglaterra",
+  "Brennan Johnson": "🏴 Gales",
+  "Javi Morcillo": "🇪🇸 España",
+  "Pep Gonzáles": "🇩🇴 República Dominicana"
+};
+db.players.forEach(p => {
+  if (nationalityByName[p.name]) p.nationality = nationalityByName[p.name];
+});
+try { localStorage.setItem("tmrp-pro-v2", JSON.stringify(db)); } catch(e) {}
+
+let account={role:"visitante",clubId:""};
+const $=id=>document.getElementById(id), clubName=id=>db.clubs.find(c=>c.id===id)?.name||"Sin club", fmt=n=>"€"+Number(n||0).toLocaleString("es-ES")+" M", uid=()=>Math.random().toString(36).slice(2,10);
+function save(){localStorage.setItem("tmrp-pro-v2",JSON.stringify(db));render()}
+function showView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(v).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v))}
+document.querySelectorAll("nav button[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function openModal(title,html){$("modalTitle").textContent=title;$("modalBody").innerHTML=html;$("modalback").classList.add("show")}
+function closeModal(){$("modalback").classList.remove("show")}
+function openAccount(){openModal("Acceso de demostración",`<p class="muted">Selecciona un perfil para probar los permisos visuales. No es un inicio de sesión seguro.</p><div class="formgrid"><div><label>Tipo de cuenta</label><select id="roleSelect" onchange="toggleClubSelect()"><option value="visitante">Visitante</option><option value="dt">Director técnico</option><option value="admin">Administrador</option></select></div><div id="clubSelectWrap"><label>Club asignado</label><select id="clubSelect">${db.clubs.map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join("")}</select></div></div><button onclick="setAccount()">Continuar</button>`)}
+function toggleClubSelect(){const r=$("roleSelect").value;$("clubSelectWrap").style.display=r==="dt"?"block":"none"}
+function setAccount(){account.role=$("roleSelect").value;account.clubId=$("clubSelect")?.value||"";$("accountBtn").textContent=account.role==="admin"?"Administrador":account.role==="dt"?"DT · "+clubName(account.clubId):"Visitante";$("adminNav").style.display=account.role==="admin"?"inline-block":"none";closeModal();render();renderSquads()}
+function canEdit(clubId){return account.role==="admin"||(account.role==="dt"&&account.clubId===clubId)}
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+ $("nPlayers").textContent=db.players.length;$("nClubs").textContent=db.clubs.length;$("nTransfers").textContent=db.transfers.length;$("nValue").textContent=fmt(db.players.reduce((a,p)=>a+Number(p.value),0));
+ $("totalGoals").textContent=db.players.reduce((a,p)=>a+Number(p.goals),0);$("totalAssists").textContent=db.players.reduce((a,p)=>a+Number(p.assists),0);$("totalMatches").textContent=db.players.reduce((a,p)=>a+Number(p.matches),0);
+ const recent=db.transfers.slice().reverse().slice(0,5);$("recentRows").innerHTML=recent.length?recent.map(t=>`<tr><td><b>${safe(t.player)}</b></td><td>${safe(t.type)}</td><td>${safe(t.from||"Libre")} → ${safe(t.to||"Libre")}</td><td>${safe(t.date)}</td></tr>`).join(""):empty(4,"Aún no hay movimientos.");
+ renderPlayers();renderClubs();renderSquads();renderLeagues();renderTransfers();renderMarket();renderStats();renderHistory();
+}
+function empty(n,msg){return `<tr><td colspan="${n}" class="empty">${msg}</td></tr>`}
+const playerPhotoCache = Object.create(null);
+const photoQueue = [];
+let photoWorkers = 0;
+function photoLookupName(name){
+  // Pep Gonzáles usa intencionalmente el retrato de Marcus Thuram.
+  return name === "Pep Gonzáles" ? "Marcus Thuram" : name;
+}
+function normalizePlayerName(value){
+  return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+}
+function collectPlayerCandidates(data){
+  const found = [];
+  const seen = new Set();
+  function walk(value, depth){
+    if (!value || depth > 6) return;
+    if (Array.isArray(value)) { value.forEach(v => walk(v, depth + 1)); return; }
+    if (typeof value !== "object") return;
+    const player = value.player && typeof value.player === "object" ? value.player : value;
+    const name = player.name || player.full_name || value.name;
+    const image = player.image || player.photo || player.picture || value.image || value.photo;
+    if (name && image) {
+      const key = String(name) + "|" + String(image);
+      if (!seen.has(key)) { seen.add(key); found.push({name, image}); }
+    }
+    Object.values(value).forEach(v => {
+      if (v && typeof v === "object") walk(v, depth + 1);
+    });
+  }
+  walk(data, 0);
+  return found;
+}
+async function fetchPlayerPortrait(name){
+  const queryName = photoLookupName(name);
+  const key = normalizePlayerName(queryName);
+  if (Object.prototype.hasOwnProperty.call(playerPhotoCache,key)) return playerPhotoCache[key];
+  const endpoint = "https://transfermarkt-scraper.omkar.cloud/transfermarkt/search?query=" +
+    encodeURIComponent(queryName) + "&type=players";
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      const response = await fetch(endpoint, {
+        method:"GET",
+        mode:"cors",
+        headers:{"Accept":"application/json"},
+        signal:controller.signal,
+        cache:"force-cache"
+      });
+      clearTimeout(timeout);
+      if (!response.ok) {
+        if ((response.status === 429 || response.status >= 500) && attempt === 0) {
+          await new Promise(resolve => setTimeout(resolve, 900));
+          continue;
+        }
+        break;
+      }
+      const data = await response.json();
+      const exact = collectPlayerCandidates(data).find(item =>
+        normalizePlayerName(item.name) === key &&
+        /^https:\/\/img\.a\.transfermarkt\.technology\/portrait\//i.test(item.image)
+      );
+      if (exact) {
+        playerPhotoCache[key] = exact.image;
+        return exact.image;
+      }
+      break;
+    } catch (e) {
+      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 700));
+    }
+  }
+  playerPhotoCache[key] = "";
+  return "";
+}
+function enqueuePlayerPhoto(name, img){
+  photoQueue.push({name, img});
+  runPhotoQueue();
+}
+function runPhotoQueue(){
+  while (photoWorkers < 3 && photoQueue.length) {
+    const job = photoQueue.shift();
+    photoWorkers++;
+    fetchPlayerPortrait(job.name).then(url => {
+      const img = job.img;
+      if (!img.isConnected) return;
+      const fallback = img.parentElement.querySelector(".initial");
+      if (!url) {
+        img.style.display = "none";
+        if (fallback) {
+          fallback.textContent = "Sin foto";
+          fallback.style.fontSize = "10px";
+        }
+        return;
+      }
+      img.referrerPolicy = "no-referrer";
+      img.onload = () => { if (fallback) fallback.style.display = "none"; };
+      img.onerror = () => {
+        img.style.display = "none";
+        if (fallback) {
+          fallback.textContent = "Sin foto";
+          fallback.style.fontSize = "10px";
+        }
+      };
+      img.src = url;
+    }).finally(() => {
+      photoWorkers--;
+      runPhotoQueue();
+    });
+  }
+}
+function renderPlayers(){
+ let q=($("playerSearch")?.value||"").toLowerCase();
+ let rows=db.players.filter(p=>(p.name+" "+p.pos+" "+(p.nationality||"")+" "+clubName(p.club)).toLowerCase().includes(q));
+ $("playerRows").innerHTML=rows.map(p=>`<tr><td><div class="player"><div class="avatar"><span class="initial">${safe(p.name.slice(0,1))}</span><img alt="Retrato de ${safe(p.name)}" loading="lazy"></div><b>${safe(p.name)}</b></div></td><td>${safe(p.nationality||"—")}</td><td>${p.age}</td><td><span class="tag">${safe(p.pos)}</span></td><td>${safe(clubName(p.club))}</td><td class="value">${fmt(p.value)}</td><td>${p.goals}</td><td>${p.assists}</td><td>${canEdit(p.club)?`<button class="secondary" onclick="editPlayer('${p.id}')">Editar</button>`:"—"}</td></tr>`).join("")||empty(9,"No hay jugadores registrados.");
+ const imgs=$("playerRows").querySelectorAll("tr");
+ rows.forEach((p,i)=>{const img=imgs[i]?.querySelector("img");if(img)enqueuePlayerPhoto(p.name,img);});
+}
+function openSquad(clubId){
+ if(account.role==="visitante")return alert("Entra como director técnico o administrador para consultar las plantillas.");
+ if(account.role==="dt"&&account.clubId!==clubId)return alert("Solo puedes consultar la plantilla del club que tienes asignado.");
+ showView("squads");
+ const sel=$("squadClub");if(sel){sel.value=clubId;renderSquads();}
+}
+function renderSquads(){
+ const select=$("squadClub");
+ if(!select)return;
+ const allowed=account.role==="dt"?db.clubs.filter(c=>c.id===account.clubId):db.clubs.filter(c=>["Brentford","Everton"].includes(c.name));
+ if(account.role==="visitante"){
+   $("squadContent").innerHTML='<div class="panel"><b>Acceso restringido</b><p class="muted">Entra como director técnico o administrador para consultar las plantillas de Brentford y Everton.</p><button onclick="openAccount()">Entrar / Cuenta</button></div>';
+   select.innerHTML='<option value="">Inicia sesión para ver plantillas</option>';
+   return;
+ }
+ if(account.role==="admin"){
+   select.innerHTML=db.clubs.filter(c=>["Brentford","Everton"].includes(c.name)).map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join("");
+   $("squadSubtitle").textContent="El administrador puede consultar Brentford y Everton";
+   $("squadAccessNote").textContent="Acceso de administrador: puedes consultar las dos plantillas completas.";
+ } else {
+   select.innerHTML=allowed.map(c=>`<option value="${c.id}">${safe(c.name)}</option>`).join("");
+   $("squadSubtitle").textContent="Plantilla del club asignado al director técnico";
+   $("squadAccessNote").textContent="Como director técnico, puedes consultar la plantilla del club que tienes asignado.";
+ }
+ if(!select.options.length){
+   $("squadContent").innerHTML='<div class="empty">No hay un club asignado a esta cuenta.</div>';
+   return;
+ }
+ if(account.role==="dt")select.value=account.clubId;
+ const club=db.clubs.find(c=>c.id===select.value)||allowed[0];
+ if(!club){$("squadContent").innerHTML='<div class="empty">No hay plantillas disponibles.</div>';return;}
+ const players=db.players.filter(p=>p.club===club.id);
+ $("squadContent").innerHTML=`<div class="panel"><div class="head"><div><h2>${safe(club.name)}</h2><span class="muted">${players.length} jugadores · ${safe(club.league||"Sin liga")}</span></div><span class="tag">${safe(club.abbr||club.name)}</span></div><div class="tablewrap"><table><thead><tr><th>Jugador</th><th>Nacionalidad</th><th>Posición</th><th>Valor</th><th>Goles</th><th>Asist.</th><th></th></tr></thead><tbody>${players.map(p=>`<tr><td><div class="player"><div class="avatar"><span class="initial">${safe(p.name.slice(0,1))}</span><img alt="Retrato de ${safe(p.name)}" loading="lazy"></div><b>${safe(p.name)}</b></div></td><td>${safe(p.nationality||"—")}</td><td><span class="tag">${safe(p.pos)}</span></td><td class="value">${fmt(p.value)}</td><td>${p.goals}</td><td>${p.assists}</td><td>${canEdit(club.id)?`<button class="secondary" onclick="editPlayer('${p.id}')">Editar</button>`:"—"}</td></tr>`).join("")||'<tr><td colspan="7" class="empty">No hay jugadores en esta plantilla.</td></tr>'}</tbody></table></div></div>`;
+ const imageRows=$("squadContent").querySelectorAll("tbody tr");
+ players.forEach((p,i)=>{const img=imageRows[i]?.querySelector("img");if(img)enqueuePlayerPhoto(p.name,img);});
+}
+function renderClubs(){let groups={};db.clubs.forEach(c=>{let l=c.league||"Sin liga asignada";(groups[l]??=[]).push(c)});$("clubCards").innerHTML=Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0])).map(([league,clubs])=>`<section style="margin:14px 0 22px"><div class="head"><h2>${safe(league)}</h2><span class="tag">${clubs.length} clubes RP</span></div><div class="clubgrid">${clubs.map(c=>`<div class="clubcard"><div class="clubtop"><div class="crest">${safe(c.abbr||c.name.slice(0,2).toUpperCase())}</div><div style="flex:1"><h3>${safe(c.name)}</h3><span class="muted">${safe(c.coach||"Sin entrenador")}</span></div><span class="tag">${db.players.filter(p=>p.club===c.id).length} jugadores</span></div><p>Presupuesto: <b class="value">${fmt(c.budget)}</b></p><p>Valor de plantilla: <b>${fmt(db.players.filter(p=>p.club===c.id).reduce((a,p)=>a+Number(p.value),0))}</b></p><button class="secondary" onclick="openSquad('${c.id}')">Ver plantilla</button> ${canEdit(c.id)?`<button class="secondary" onclick="editClub('${c.id}')">Administrar club</button>`:""}</div>`).join("")}</div></section>`).join("")||'<div class="empty">No hay clubes registrados.</div>'}
+function renderTransfers(){$("transferRows").innerHTML=db.transfers.slice().reverse().map(t=>`<tr><td><b>${safe(t.player)}</b></td><td>${safe(t.type)}</td><td>${safe(t.from||"Libre")}</td><td>${safe(t.to||"Libre")}</td><td class="value">${fmt(t.fee)}</td><td><span class="tag">Registrado</span></td></tr>`).join("")||empty(6,"No hay fichajes registrados.");}
+function renderMarket(){let q=($("marketSearch")?.value||"").toLowerCase(),pos=$("marketPos")?.value||"";let rows=db.players.filter(p=>(p.name+" "+clubName(p.club)).toLowerCase().includes(q)&&(!pos||p.pos===pos));$("marketRows").innerHTML=rows.map(p=>`<tr><td><b>${safe(p.name)}</b></td><td>${safe(clubName(p.club))}</td><td>${safe(p.pos)}</td><td class="value">${fmt(p.value)}</td><td>€${Number(p.salary||0).toLocaleString("es-ES")}</td></tr>`).join("")||empty(5,"No hay resultados.");}
+function renderStats(){$("statsRows").innerHTML=db.players.slice().sort((a,b)=>b.goals-a.goals).map(p=>`<tr><td><b>${safe(p.name)}</b></td><td>${safe(clubName(p.club))}</td><td>${p.matches}</td><td>${p.goals}</td><td>${p.assists}</td></tr>`).join("")||empty(5,"No hay estadísticas.");}
+function renderHistory(){$("historyRows").innerHTML=db.transfers.slice().reverse().map(t=>`<tr><td>${safe(t.date)}</td><td><b>${safe(t.player)}</b></td><td>${safe(t.type)}</td><td>${safe(t.from||"Libre")}</td><td>${safe(t.to||"Libre")}</td><td class="value">${fmt(t.fee)}</td></tr>`).join("")||empty(6,"El historial está vacío.");}
+function clubOptions(selected=""){return db.clubs.map(c=>`<option value="${c.id}" ${c.id===selected?"selected":""}>${safe(c.name)}</option>`).join("")}
+function openPlayer(){if(!["admin","dt"].includes(account.role))return alert("Entra como director técnico o administrador para añadir jugadores.");let own=account.role==="dt"?account.clubId:"";openModal("Registrar jugador",`<div class="formgrid"><div><label>Nombre</label><input id="fName"></div><div><label>Edad</label><input id="fAge" type="number" min="15" max="60"></div><div><label>Posición</label><select id="fPos">${["POR","DFC","LI","LD","MCD","MC","MCO","EI","ED","DC"].map(x=>`<option>${x}</option>`).join("")}</select></div><div><label>Club</label><select id="fClub" ${own?"disabled":""}>${clubOptions(own)}</select></div><div><label>Valor (millones €)</label><input id="fValue" type="number" min="0"></div><div><label>Salario semanal (€)</label><input id="fSalary" type="number" min="0"></div><div><label>Partidos</label><input id="fMatches" type="number" min="0" value="0"></div><div><label>Goles</label><input id="fGoals" type="number" min="0" value="0"></div><div><label>Asistencias</label><input id="fAssists" type="number" min="0" value="0"></div></div><button onclick="savePlayer()">Guardar jugador</button>`)}
+function savePlayer(){let name=$("fName").value.trim(),club=$("fClub").value;if(!name||!club)return alert("Completa nombre y club.");db.players.push({id:uid(),name,age:+$("fAge").value||18,pos:$("fPos").value,club,value:+$("fValue").value||0,salary:+$("fSalary").value||0,matches:+$("fMatches").value||0,goals:+$("fGoals").value||0,assists:+$("fAssists").value||0});closeModal();save()}
+function editPlayer(id){let p=db.players.find(x=>x.id===id);if(!p||!canEdit(p.club))return alert("No tienes permiso para modificar este jugador.");openModal("Editar estadísticas y valor",`<p><b>${safe(p.name)}</b> · ${safe(clubName(p.club))}</p><div class="formgrid"><div><label>Valor (M€)</label><input id="eValue" type="number" value="${p.value}"></div><div><label>Salario semanal (€)</label><input id="eSalary" type="number" value="${p.salary}"></div><div><label>Partidos</label><input id="eMatches" type="number" value="${p.matches}"></div><div><label>Goles</label><input id="eGoals" type="number" value="${p.goals}"></div><div><label>Asistencias</label><input id="eAssists" type="number" value="${p.assists}"></div></div><button onclick="updatePlayer('${id}')">Guardar cambios</button> <button class="danger" onclick="deletePlayer('${id}')">Eliminar jugador</button>`)}
+function updatePlayer(id){let p=db.players.find(x=>x.id===id);if(!p||!canEdit(p.club))return;Object.assign(p,{value:+$("eValue").value||0,salary:+$("eSalary").value||0,matches:+$("eMatches").value||0,goals:+$("eGoals").value||0,assists:+$("eAssists").value||0});closeModal();save()}
+function deletePlayer(id){let p=db.players.find(x=>x.id===id);if(!p||!canEdit(p.club))return;if(confirm("¿Eliminar jugador?")){db.players=db.players.filter(x=>x.id!==id);closeModal();save()}}
+function leagueOptions(selected="Premier League"){return leagueData.map(x=>`<option value="${safe(x.league)}" ${x.league===selected?"selected":""}>${safe(x.league)} · ${safe(x.country)}</option>`).join("")}
+function openClub(){if(account.role!=="admin")return alert("Solo un administrador puede registrar clubes.");openModal("Registrar club",`<div class="formgrid"><div><label>Nombre del club</label><input id="fcName"></div><div><label>Liga</label><select id="fcLeague">${leagueOptions()}</select></div><div><label>Entrenador</label><input id="fcCoach"></div><div><label>Presupuesto (M€)</label><input id="fcBudget" type="number"></div><div><label>Siglas</label><input id="fcAbbr" maxlength="4"></div></div><button onclick="saveClub()">Crear club</button>`)}
+function saveClub(){let name=$("fcName").value.trim();if(!name)return alert("Escribe el nombre del club.");db.clubs.push({id:uid(),name,league:$('fcLeague').value,coach:$('fcCoach').value.trim()||"Por asignar",budget:+$('fcBudget').value||0,abbr:$('fcAbbr').value.trim().toUpperCase()||name.slice(0,2).toUpperCase()});closeModal();save()}
+function editClub(id){let c=db.clubs.find(x=>x.id===id);if(!c||!canEdit(id))return alert("No tienes permiso.");openModal("Administrar "+safe(c.name),`<div class="formgrid"><div><label>Liga</label><select id="ecLeague" ${account.role==="admin"?"":"disabled"}>${leagueOptions(c.league||"Premier League")}</select></div><div><label>Entrenador</label><input id="ecCoach" value="${safe(c.coach)}"></div><div><label>Presupuesto (M€)</label><input id="ecBudget" type="number" value="${c.budget}" ${account.role==="admin"?"":"disabled"}></div></div><button onclick="saveClubEdit('${id}')">Guardar</button>`)}
+function saveClubEdit(id){let c=db.clubs.find(x=>x.id===id);if(!c||!canEdit(id))return;c.coach=$("ecCoach").value;if(account.role==="admin"){c.league=$("ecLeague").value;c.budget=+$('ecBudget').value||0}closeModal();save()}
+
+function renderLeagues(){let region=$("leagueRegion")?.value||"all";let rows=leagueData.filter(x=>region==="all"||x.region===region);$("leagueDirectory").innerHTML=rows.map(x=>{let names=x.clubs.split(" · ");return `<div class="clubcard"><div class="clubtop"><div class="crest">${x.region==="Europa"?"EU":x.region==="Sudamérica"?"SA":x.region==="Norteamérica"?"NA":"CA"}</div><div style="flex:1"><h3>${safe(x.league)}</h3><span class="muted">${safe(x.country)} · ${safe(x.region)}</span></div></div><p>${names.map(n=>{let active=db.clubs.find(c=>c.name.toLowerCase()===n.toLowerCase());return `<span class="tag" style="display:inline-block;margin:3px 3px 3px 0;${active?"background:#e6f2d9;color:#3f6b20":""}">${safe(n)}${active?" · RP":""}</span>`}).join("")}</p></div>`}).join("")}
+function openExternalSigning(){if(account.role!=="admin")return alert("Solo un administrador puede registrar fichajes externos en esta demo.");openModal("Fichar jugador de un club externo",`<p class="muted">Puedes elegir una liga del directorio y escribir cualquier club que no participe en el RP.</p><div class="formgrid"><div><label>Liga</label><select id="exLeague">${leagueData.map((x,i)=>`<option value="${i}">${safe(x.league)} · ${safe(x.country)}</option>`).join("")}</select></div><div><label>Club de procedencia</label><input id="exClub" placeholder="Ej. Real Madrid"></div><div><label>Nombre del jugador</label><input id="exPlayer"></div><div><label>Edad</label><input id="exAge" type="number" min="15" max="50" value="22"></div><div><label>Posición</label><select id="exPos">${["POR","DFC","LI","LD","MCD","MC","MCO","EI","ED","DC"].map(x=>`<option>${x}</option>`).join("")}</select></div><div><label>Valor de mercado (M€)</label><input id="exValue" type="number" min="0" value="10"></div><div><label>Precio del fichaje (M€)</label><input id="exFee" type="number" min="0" value="10"></div><div><label>Club RP que ficha</label><select id="exTo">${clubOptions()}</select></div><div><label>Salario semanal (€)</label><input id="exSalary" type="number" min="0" value="30000"></div></div><button onclick="saveExternalSigning()">Confirmar fichaje</button>`)}
+function saveExternalSigning(){let league=leagueData[+$('exLeague').value],source=$('exClub').value.trim(),name=$('exPlayer').value.trim(),to=$('exTo').value,fee=+$('exFee').value||0;if(!source||!name||!to)return alert("Completa el club de origen, el jugador y el club RP.");let dest=db.clubs.find(c=>c.id===to);if(dest&&dest.budget<fee)return alert("El presupuesto del club RP no alcanza para este fichaje.");db.players.push({id:uid(),name,age:+$('exAge').value||22,pos:$('exPos').value,club:to,value:+$('exValue').value||0,salary:+$('exSalary').value||0,matches:0,goals:0,assists:0});if(dest)dest.budget-=fee;db.transfers.push({id:uid(),player:name,type:"Fichaje externo",from:source+" ("+league.league+", "+league.country+")",to:clubName(to),fee,date:new Date().toLocaleDateString("es-CO")});closeModal();save();showView("transfers")}
+
+function openTransfer(){if(account.role!=="admin")return alert("Solo un administrador puede registrar movimientos en esta demo.");openModal("Registrar movimiento",`<div class="formgrid"><div><label>Jugador</label><select id="ftPlayer">${db.players.map(p=>`<option value="${p.id}">${safe(p.name)} · ${safe(clubName(p.club))}</option>`).join("")}</select></div><div><label>Tipo</label><select id="ftType"><option>Compra</option><option>Venta</option><option>Préstamo</option><option>Fin de préstamo</option></select></div><div><label>Club destino</label><select id="ftTo">${clubOptions()}</select></div><div><label>Importe (M€)</label><input id="ftFee" type="number" min="0" value="0"></div></div><button onclick="saveTransfer()">Registrar operación</button>`)}
+function saveTransfer(){let p=db.players.find(x=>x.id===$("ftPlayer").value),to=$("ftTo").value;if(!p||!to)return alert("Selecciona jugador y club destino.");let from=p.club,fee=+$("ftFee").value||0;db.transfers.push({id:uid(),player:p.name,type:$("ftType").value,from:clubName(from),to:clubName(to),fee,date:new Date().toLocaleDateString("es-CO")});if($("ftType").value!=="Préstamo")p.club=to;closeModal();save()}
+function exportData(){if(account.role!=="admin")return alert("Solo administradores.");let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="transfermarkt-rp-datos.json";a.click();URL.revokeObjectURL(a.href)}
+function resetDemo(){if(account.role!=="admin")return alert("Solo administradores.");if(confirm("¿Restablecer los datos de demostración?")){db=JSON.parse(JSON.stringify(seed));save()}}
+render();
+</script></body></html>
